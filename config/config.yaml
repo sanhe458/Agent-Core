@@ -1,0 +1,50 @@
+core:
+  name: "AI仿人类程序"
+  version: "1.0.0"
+  debug: false
+  enable_logging: true
+  log_level: "info"
+
+webui:
+  host: "127.0.0.1"
+  port: 8000
+  enable: true
+
+plugins:
+  console:
+    enabled: true
+  qq:
+    enabled: true
+    host: "localhost"
+    port: 8080
+    token: ""
+
+providers:
+  - name: "openai"
+    type: "openai"
+    api_key: "your_api_key_here"
+    base_url: "https://api.openai.com/v1"
+  - name: "ollama"
+    type: "ollama"
+    api_url: "http://localhost:11434/api"
+
+models:
+  - name: "gpt-4"
+    provider: "openai"
+    type: "chat"
+  - name: "llama3"
+    provider: "ollama"
+    type: "chat"
+
+router:
+  main: "gpt-4"
+  image_to_text: "gpt-4"
+  stt: "whisper-1"
+  embedding: "text-embedding-3-small"
+  rerank: "gpt-4"
+
+personality:
+  name: "AI助手"
+  description: "一个智能、友好的AI助手，能够回答各种问题并提供帮助。"
+  tone: "友好、专业、耐心"
+  language: "中文"

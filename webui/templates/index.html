@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI仿人类程序管理界面</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI仿人类程序管理界面</h1>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">仪表盘</a></li>
+                    <li><a href="#config">配置管理</a></li>
+                    <li><a href="#plugins">插件管理</a></li>
+                    <li><a href="#models">模型管理</a></li>
+                    <li><a href="#logs">日志</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <section id="dashboard">
+                <h2>仪表盘</h2>
+                <div class="card">
+                    <h3>系统状态</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">服务状态</span>
+                            <span class="status-value" id="service-status">运行中</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">插件数量</span>
+                            <span class="status-value" id="plugin-count">2</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">活跃会话</span>
+                            <span class="status-value" id="session-count">0</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">模型状态</span>
+                            <span class="status-value" id="model-status">正常</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="config">
+                <h2>配置管理</h2>
+                <div class="card">
+                    <h3>主配置</h3>
+                    <div class="config-content">
+                        <pre id="config-json">加载中...</pre>
+                        <button id="save-config">保存配置</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="plugins">
+                <h2>插件管理</h2>
+                <div class="card">
+                    <h3>已安装插件</h3>
+                    <div id="plugin-list">加载中...</div>
+                </div>
+            </section>
+            
+            <section id="models">
+                <h2>模型管理</h2>
+                <div class="card">
+                    <h3>可用模型</h3>
+                    <div id="model-list">加载中...</div>
+                </div>
+            </section>
+            
+            <section id="logs">
+                <h2>日志</h2>
+                <div class="card">
+                    <h3>系统日志</h3>
+                    <div id="logs-content" class="logs-container">
+                        <p>日志流加载中...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>© 2024 AI仿人类程序</p>
+        </footer>
+    </div>
+    
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

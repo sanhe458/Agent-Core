@@ -1,0 +1,55 @@
+ai_providers:
+  openai:
+    api_key: "your_api_key_here"
+    base_url: "https://api.openai.com/v1"
+    models:
+      main: "gpt-4"
+      image_to_text: "gpt-4"
+      stt: "whisper-1"
+      embedding: "text-embedding-3-small"
+      rerank: "gpt-4"
+  ollama:
+    api_url: "http://localhost:11434/api"
+    models:
+      main: "llama3"
+      image_to_text: "llava"
+      stt: "whisper"
+      embedding: "all-minilm-l6-v2"
+      rerank: "bge-reranker-v2-m3"
+
+routers:
+  - model_role: "main"
+    provider: "openai"
+    priority: 1
+  - model_role: "main"
+    provider: "ollama"
+    priority: 10
+    fallback: true
+  - model_role: "image_to_text"
+    provider: "openai"
+    priority: 1
+  - model_role: "image_to_text"
+    provider: "ollama"
+    priority: 10
+    fallback: true
+  - model_role: "stt"
+    provider: "openai"
+    priority: 1
+  - model_role: "stt"
+    provider: "ollama"
+    priority: 10
+    fallback: true
+  - model_role: "embedding"
+    provider: "openai"
+    priority: 1
+  - model_role: "embedding"
+    provider: "ollama"
+    priority: 10
+    fallback: true
+  - model_role: "rerank"
+    provider: "openai"
+    priority: 1
+  - model_role: "rerank"
+    provider: "ollama"
+    priority: 10
+    fallback: true
