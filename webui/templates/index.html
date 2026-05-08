@@ -7,75 +7,206 @@
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AI仿人类程序管理界面</h1>
-            <nav>
-                <ul>
-                    <li><a href="#dashboard">仪表盘</a></li>
-                    <li><a href="#config">配置管理</a></li>
-                    <li><a href="#plugins">插件管理</a></li>
-                    <li><a href="#models">模型管理</a></li>
-                    <li><a href="#logs">日志</a></li>
-                </ul>
-            </nav>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 8v8l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>仪表盘</span>
+            </a>
+            <a href="#characters" class="nav-item" data-section="characters">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                </svg>
+                <span>人物管理</span>
+            </a>
+            <a href="#config" class="nav-item" data-section="config">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span>配置管理</span>
+            </a>
+            <a href="#plugins" class="nav-item" data-section="plugins">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <span>插件管理</span>
+            </a>
+            <a href="#models" class="nav-item" data-section="models">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span>模型管理</span>
+            </a>
+            <a href="#logs" class="nav-item" data-section="logs">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <span>日志</span>
+            </a>
+        </nav>
+    </div>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    
+    <div class="main-content">
+        <header class="topbar">
+            <div class="topbar-title">
+                <h1 id="pageTitle">仪表盘</h1>
+            </div>
+            <div class="topbar-actions">
+                <span class="status-indicator online"></span>
+                <span class="status-text">系统运行中</span>
+            </div>
         </header>
         
-        <main>
-            <section id="dashboard">
-                <h2>仪表盘</h2>
-                <div class="card">
-                    <h3>系统状态</h3>
-                    <div class="status-grid">
-                        <div class="status-item">
-                            <span class="status-label">服务状态</span>
-                            <span class="status-value" id="service-status">运行中</span>
+        <main class="content-area">
+            <section id="dashboard" class="content-section active">
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>系统状态</h3>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <span class="status-label">服务状态</span>
+                                <span class="status-value" id="service-status">运行中</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">插件数量</span>
+                                <span class="status-value" id="plugin-count">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">活跃会话</span>
+                                <span class="status-value" id="session-count">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">模型状态</span>
+                                <span class="status-value" id="model-status">正常</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">人物数量</span>
+                                <span class="status-value" id="character-count">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">关系数量</span>
+                                <span class="status-value" id="relationship-count">0</span>
+                            </div>
                         </div>
-                        <div class="status-item">
-                            <span class="status-label">插件数量</span>
-                            <span class="status-value" id="plugin-count">2</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">活跃会话</span>
-                            <span class="status-value" id="session-count">0</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label">模型状态</span>
-                            <span class="status-value" id="model-status">正常</span>
-                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>人物统计</h3>
+                        <canvas id="characterStatsChart" width="300" height="200"></canvas>
                     </div>
                 </div>
             </section>
             
-            <section id="config">
-                <h2>配置管理</h2>
+            <section id="characters" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>人物列表</h3>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" id="refreshCharacters">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                </svg>
+                                刷新
+                            </button>
+                            <button class="btn btn-primary" id="addCharacter">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                添加人物
+                            </button>
+                        </div>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="characterSearch" placeholder="搜索人物..." class="search-input">
+                    </div>
+                    <div class="character-list" id="characterList">
+                        <div class="loading">加载中...</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>关系网络</h3>
+                        <button class="btn btn-secondary" id="refreshNetwork">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                            </svg>
+                            刷新
+                        </button>
+                    </div>
+                    <div class="network-container" id="networkContainer">
+                        <svg id="relationshipNetwork" width="100%" height="400"></svg>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>合并建议</h3>
+                    </div>
+                    <div class="merge-suggestions" id="mergeSuggestions">
+                        <p class="empty-state">暂无合并建议</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="config" class="content-section">
                 <div class="card">
                     <h3>主配置</h3>
                     <div class="config-content">
                         <pre id="config-json">加载中...</pre>
-                        <button id="save-config">保存配置</button>
+                        <button id="save-config" class="btn btn-primary">保存配置</button>
                     </div>
                 </div>
             </section>
             
-            <section id="plugins">
-                <h2>插件管理</h2>
+            <section id="plugins" class="content-section">
                 <div class="card">
                     <h3>已安装插件</h3>
                     <div id="plugin-list">加载中...</div>
                 </div>
             </section>
             
-            <section id="models">
-                <h2>模型管理</h2>
+            <section id="models" class="content-section">
                 <div class="card">
                     <h3>可用模型</h3>
                     <div id="model-list">加载中...</div>
                 </div>
             </section>
             
-            <section id="logs">
-                <h2>日志</h2>
+            <section id="logs" class="content-section">
                 <div class="card">
                     <h3>系统日志</h3>
                     <div id="logs-content" class="logs-container">
@@ -84,11 +215,116 @@
                 </div>
             </section>
         </main>
-        
-        <footer>
-            <p>© 2024 AI仿人类程序</p>
-        </footer>
     </div>
+    
+    <div class="modal" id="characterModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">添加人物</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="characterForm">
+                    <input type="hidden" id="characterId">
+                    <div class="form-group">
+                        <label for="characterName">姓名</label>
+                        <input type="text" id="characterName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="characterAliases">别名（用逗号分隔）</label>
+                        <input type="text" id="characterAliases" placeholder="如：张三，小明">
+                    </div>
+                    <div class="form-group">
+                        <label for="characterDescription">描述</label>
+                        <textarea id="characterDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="characterPlatform">平台</label>
+                        <input type="text" id="characterPlatform" placeholder="如：QQ、微信">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelCharacter">取消</button>
+                <button class="btn btn-primary" id="saveCharacter">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="relationshipModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加关系</h3>
+                <button class="modal-close" id="closeRelationshipModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="relationshipForm">
+                    <input type="hidden" id="relationshipSourceId">
+                    <div class="form-group">
+                        <label for="relationshipTarget">目标人物</label>
+                        <select id="relationshipTarget" required>
+                            <option value="">选择人物</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="relationshipType">关系类型</label>
+                        <select id="relationshipType" required>
+                            <option value="">选择关系</option>
+                            <option value="朋友">朋友</option>
+                            <option value="家人">家人</option>
+                            <option value="同事">同事</option>
+                            <option value="师生">师生</option>
+                            <option value="配偶">配偶</option>
+                            <option value="恋人">恋人</option>
+                            <option value="敌人">敌人</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="relationshipDescription">描述</label>
+                        <textarea id="relationshipDescription" rows="2"></textarea>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="relationshipBidirectional">
+                            双向关系
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelRelationship">取消</button>
+                <button class="btn btn-primary" id="saveRelationship">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="mergeModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>合并人物</h3>
+                <button class="modal-close" id="closeMergeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="merge-info">确定要合并以下人物吗？</p>
+                <div class="merge-preview">
+                    <div class="merge-item" id="mergeSource"></div>
+                    <span class="merge-arrow">→</span>
+                    <div class="merge-item" id="mergeTarget"></div>
+                </div>
+                <p class="merge-warning">合并后，源人物的所有信息和关系都将转移到目标人物，源人物将被删除。</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelMerge">取消</button>
+                <button class="btn btn-danger" id="confirmMerge">确认合并</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
     
     <script src="/static/js/main.js"></script>
 </body>
