@@ -1,10 +1,10 @@
 import asyncio
 import logging
-from plugin_system.plugin_base import Plugin
+from plugin_system.plugin_base import PlatformPlugin
 
 logger = logging.getLogger(__name__)
 
-class ConsolePlugin(Plugin):
+class ConsolePlugin(PlatformPlugin):
     """控制台插件"""
     
     def __init__(self, app):

@@ -2,7 +2,7 @@ import asyncio
 import logging
 from typing import Any, Dict, Optional
 
-from plugin_system.plugin_base import Plugin
+from plugin_system.plugin_base import PlatformPlugin
 from .transport import NapCatTransportClient, NapCatServerConfig
 from .router import NapCatEventRouter
 from .action_service import NapCatActionService, RuntimeBundle
