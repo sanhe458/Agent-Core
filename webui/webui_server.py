@@ -85,13 +85,81 @@ class WebUIServer:
     
     def _register_routes(self):
         """注册路由"""
+        templates_dir = os.path.join(os.path.dirname(__file__), "templates")
+        
         @self.fastapi_app.get("/")
         async def index():
             """主页"""
-            html_path = os.path.join(os.path.dirname(__file__), "templates", "index.html")
+            html_path = os.path.join(templates_dir, "index.html")
             if os.path.exists(html_path):
                 return FileResponse(html_path)
             return {"message": "Welcome to AI仿人类程序!"}
+        
+        @self.fastapi_app.get("/characters.html")
+        async def characters_page():
+            """人物管理页面"""
+            html_path = os.path.join(templates_dir, "characters.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"error": "Page not found"}
+        
+        @self.fastapi_app.get("/config.html")
+        async def config_page():
+            """配置管理页面"""
+            html_path = os.path.join(templates_dir, "config.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"error": "Page not found"}
+        
+        @self.fastapi_app.get("/plugins.html")
+        async def plugins_page():
+            """插件管理页面"""
+            html_path = os.path.join(templates_dir, "plugins.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"error": "Page not found"}
+        
+        @self.fastapi_app.get("/models.html")
+        async def models_page():
+            """模型管理页面"""
+            html_path = os.path.join(templates_dir, "models.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"error": "Page not found"}
+        
+        @self.fastapi_app.get("/logs.html")
+        async def logs_page():
+            """日志页面"""
+            html_path = os.path.join(templates_dir, "logs.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"error": "Page not found"}
+        
+        @self.fastapi_app.get("/webui/")
+        async def webui_index():
+            """WebUI主页"""
+            html_path = os.path.join(templates_dir, "index.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"message": "Welcome to AI仿人类程序!"}
+        
+        @self.fastapi_app.get("/webui/index.html")
+        async def webui_index_html():
+            """WebUI主页 (带html后缀)"""
+            html_path = os.path.join(templates_dir, "index.html")
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"message": "Welcome to AI仿人类程序!"}
+        
+        @self.fastapi_app.get("/webui/{page}")
+        async def webui_page(page: str):
+            """WebUI其他页面"""
+            if not page.endswith('.html'):
+                page = f"{page}.html"
+            html_path = os.path.join(templates_dir, page)
+            if os.path.exists(html_path):
+                return FileResponse(html_path)
+            return {"error": "Page not found"}
         
         static_path = os.path.join(os.path.dirname(__file__), "static")
         css_path = os.path.join(os.path.dirname(__file__), "css")

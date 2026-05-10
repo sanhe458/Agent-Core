@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置管理 - AI仿人类程序管理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar"></div>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    
+    <div class="main-content">
+        <header class="topbar" id="topbar"></header>
+        
+        <main class="content-area">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">系统配置</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary" id="refreshConfig">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                            </svg>
+                            刷新
+                        </button>
+                        <button class="btn btn-primary" id="save-config">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                <polyline points="17 21 17 13 7 13 7 21"/>
+                                <polyline points="7 3 7 8 15 8"/>
+                            </svg>
+                            保存
+                        </button>
+                    </div>
+                </div>
+                <div class="config-content">
+                    <pre id="config-json" class="config-editor">加载中...</pre>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title">配置说明</h3>
+                </div>
+                <div style="color: var(--text-light); line-height: 1.8;">
+                    <p style="margin-bottom: 12px;"><strong>配置格式：</strong>使用JSON格式编辑配置内容</p>
+                    <p style="margin-bottom: 12px;"><strong>保存操作：</strong>点击保存按钮将配置写入服务器</p>
+                    <p style="margin-bottom: 12px;"><strong>刷新操作：</strong>从服务器重新加载最新配置</p>
+                    <p><strong>注意事项：</strong>错误的配置可能导致系统无法正常启动，请谨慎修改</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script src="/static/js/layout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+            
+            document.getElementById('refreshConfig').addEventListener('click', loadConfig);
+            document.getElementById('save-config').addEventListener('click', saveConfig);
+        });
+        
+        async function loadConfig() {
+            const configElement = document.getElementById('config-json');
+            configElement.textContent = '加载中...';
+            
+            try {
+                const response = await fetch('/api/config');
+                if (!response.ok) throw new Error('加载配置失败');
+                const config = await response.json();
+                configElement.textContent = JSON.stringify(config, null, 2);
+                showToast('配置加载成功', 'success');
+            } catch (error) {
+                configElement.textContent = '加载配置失败: ' + error.message;
+                showToast('加载配置失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function saveConfig() {
+            const configText = document.getElementById('config-json').textContent;
+            
+            try {
+                const config = JSON.parse(configText);
+                
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+                
+                if (!response.ok) throw new Error('保存配置失败');
+                
+                showToast('配置保存成功', 'success');
+            } catch (error) {
+                if (error instanceof SyntaxError) {
+                    showToast('JSON格式错误: ' + error.message, 'error');
+                } else {
+                    showToast('保存配置失败: ' + error.message, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
