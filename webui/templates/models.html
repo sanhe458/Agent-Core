@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型管理 - AI仿人类程序管理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar"></div>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    
+    <div class="main-content">
+        <header class="topbar" id="topbar"></header>
+        
+        <main class="content-area">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">可用模型</h3>
+                    <button class="btn btn-secondary" id="refreshModels">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        刷新
+                    </button>
+                </div>
+                <div id="model-list" class="model-list">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title">模型配置说明</h3>
+                </div>
+                <div style="color: var(--text-light); line-height: 1.8;">
+                    <p style="margin-bottom: 12px;"><strong>支持的提供商：</strong></p>
+                    <ul style="margin-left: 20px; margin-bottom: 12px;">
+                        <li><strong>OpenAI</strong> - OpenAI GPT系列模型</li>
+                        <li><strong>Ollama</strong> - 本地运行的LLM模型</li>
+                    </ul>
+                    <p style="margin-bottom: 12px;"><strong>模型角色：</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>character</strong> - 人物识别模型</li>
+                        <li><strong>summary</strong> - 摘要生成模型</li>
+                        <li><strong>embedding</strong> - 向量嵌入模型</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script src="/static/js/layout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadModelList();
+            
+            document.getElementById('refreshModels').addEventListener('click', loadModelList);
+        });
+        
+        async function loadModelList() {
+            const modelList = document.getElementById('model-list');
+            modelList.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>加载中...</p>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/models');
+                if (!response.ok) throw new Error('加载模型列表失败');
+                const models = await response.json();
+                
+                const modelEntries = Object.entries(models);
+                
+                if (modelEntries.length === 0) {
+                    modelList.innerHTML = `
+                        <div class="empty-state">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            <p>暂无配置的模型</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                modelEntries.forEach(([provider, providerInfo]) => {
+                    const isOnline = providerInfo.status === 'online' || providerInfo.status === 'connected';
+                    const modelsList = providerInfo.models || {};
+                    
+                    html += `
+                        <div class="model-card">
+                            <div class="model-info">
+                                <div class="model-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                        <path d="M2 17l10 5 10-5"/>
+                                        <path d="M2 12l10 5 10-5"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="model-name">${escapeHtml(provider)}</div>
+                                    <div class="model-status">
+                                        <span class="status-badge ${isOnline ? 'active' : 'inactive'}">
+                                            ${isOnline ? '在线' : '离线'}
+                                        </span>
+                                        ${providerInfo.endpoint ? `<span>${escapeHtml(providerInfo.endpoint)}</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ${Object.keys(modelsList).length > 0 ? `
+                            <div class="models-list" style="margin: 12px 0 12px 64px;">
+                                ${Object.entries(modelsList).map(([role, model]) => `
+                                    <span class="model-tag">${escapeHtml(role)}: ${escapeHtml(model)}</span>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    `;
+                });
+                
+                modelList.innerHTML = html;
+                showToast('模型列表加载成功', 'success');
+            } catch (error) {
+                modelList.innerHTML = `
+                    <div class="empty-state">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                        <p>加载失败: ${error.message}</p>
+                    </div>
+                `;
+                showToast('加载模型列表失败: ' + error.message, 'error');
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
