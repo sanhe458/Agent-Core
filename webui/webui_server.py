@@ -34,6 +34,10 @@ class WebUIServer:
     
     async def start(self):
         """启动WebUI服务器"""
+        self.config = self.app.get_config("webui", {})
+        self.host = self.config.get("host", "127.0.0.1")
+        self.port = self.config.get("port", 8000)
+        
         logger.info(f"正在启动WebUI服务器，监听 {self.host}:{self.port}...")
 
         if not self.port or not isinstance(self.port, int):
