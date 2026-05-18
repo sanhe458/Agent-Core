@@ -9,6 +9,9 @@ webui:
   host: "127.0.0.1"
   port: 8000
   enable: true
+  allowed_origins:
+    - "http://localhost"
+    - "http://127.0.0.1"
 
 plugins:
   console:

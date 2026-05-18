@@ -22,9 +22,11 @@ class WebUIServer:
         self.port = self.config.get("port", 8000)
         self.server = None
         
+        # CORS configuration - default to localhost for security
+        allowed_origins = self.config.get("allowed_origins", ["http://localhost", "http://127.0.0.1"])
         self.fastapi_app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],
+            allow_origins=allowed_origins,
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -160,7 +162,12 @@ class WebUIServer:
             """WebUI其他页面"""
             if not page.endswith('.html'):
                 page = f"{page}.html"
+            # Prevent path traversal
+            page = os.path.basename(page)
             html_path = os.path.join(templates_dir, page)
+            # Ensure the path is within templates_dir
+            if os.path.commonpath([os.path.abspath(html_path), os.path.abspath(templates_dir)]) != os.path.abspath(templates_dir):
+                return {"error": "Page not found"}
             if os.path.exists(html_path):
                 return FileResponse(html_path)
             return {"error": "Page not found"}
@@ -178,8 +185,25 @@ class WebUIServer:
         
         @self.fastapi_app.get("/api/config")
         async def get_config():
-            """获取配置"""
-            return self.app.get_config()
+            """获取配置（过滤敏感信息）"""
+            config = self.app.get_config()
+            
+            # Filter out sensitive fields
+            def filter_sensitive(data):
+                if isinstance(data, dict):
+                    filtered = {}
+                    for key, value in data.items():
+                        # Skip sensitive keys
+                        if key.lower() in ['api_key', 'token', 'secret', 'password', 'key']:
+                            continue
+                        filtered[key] = filter_sensitive(value)
+                    return filtered
+                elif isinstance(data, list):
+                    return [filter_sensitive(item) for item in data]
+                else:
+                    return data
+            
+            return filter_sensitive(config)
         
         @self.fastapi_app.post("/api/config")
         async def update_config(config: Dict[str, Any]):
