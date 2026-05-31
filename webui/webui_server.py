@@ -160,8 +160,12 @@ class WebUIServer:
             """WebUI其他页面"""
             if not page.endswith('.html'):
                 page = f"{page}.html"
-            html_path = os.path.join(templates_dir, page)
-            if os.path.exists(html_path):
+            # 防止路径遍历攻击
+            html_path = os.path.normpath(os.path.join(templates_dir, page))
+            # 确保最终路径在 templates_dir 内
+            if os.path.commonpath([html_path, templates_dir]) != templates_dir:
+                raise HTTPException(status_code=400, detail="Invalid page path")
+            if os.path.exists(html_path) and os.path.isfile(html_path):
                 return FileResponse(html_path)
             return {"error": "Page not found"}
         
